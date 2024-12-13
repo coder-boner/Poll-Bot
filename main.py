@@ -1,34 +1,50 @@
-import os
-import random
-import time
-import asyncio
+#MADE BY Coder-Boner (https://github.com/coder-boner/)
+#Repo (https://github.com/coder-boner/Poll-Bot)
+
 import discord
 from discord.ext import commands
-from discord.ext import tasks
-from discord import app_commands
-from discord.ext.commands import has_permissions, MissingPermissions
-from discord.utils import get
-from itertools import cycle
-import json
-import random
 
+# Replace TOKEN with your bot's token
+BOT_TOKEN = 'TOKEN'
+# Replace CHANNEL_ID with your desired channel id
+suggestion_channel_id = CHANNEL_ID
+
+# Intents (required to access certain features)
 intents = discord.Intents.default()
-intents.members = True
-intents.presences = True
-intents.reactions = True
-intents.guilds = True
-intents.members = True
-intents.messages = True
+intents.message_content = True
 
-bot = commands.Bot(command_prefix='!', intents=intents)
-
-TOKEN = 'TOKEN'
+# Create a bot instance
+bot = commands.Bot(command_prefix='?', intents=intents)
 
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user}')
-    print('Bot is ready')
+
+# The event for creating the thread and reacting to message
+@bot.event
+async def on_message(message):
+    # Makes sure the bot does not react ot its own message
+    if message.author == bot.user:
+        return
+
+    # Compares the channel id that the message was sent in
+    # and if it is not it will not continue
+    if message.channel.id == suggestion_channel_id:
+
+        print(f'Suggestion from {message.author}: {message.content}')
+
+        # Reacting to said message
+        try:
+            await message.add_reaction('✔')
+            await message.add_reaction('❌')
+            await message.create_thread(name=f'{message.author.name} Thread.', slowmode_delay=15)
+
+        # To catch errors/exceptions when they occur
+        except discord.HTTPException as e:  # Catch Discord-specific exceptions
+            print(f"Error reacting to the message: {e}")
+        except Exception as e:  # Catch any other general exceptions
+            print(f"Unexpected error: {e}")
 
 
-
-bot.run(TOKEN)
+# Run the bot
+bot.run(BOT_TOKEN)
