@@ -1,5 +1,6 @@
-#MADE BY Coder-Boner (https://github.com/coder-boner/)
-#Repo (https://github.com/coder-boner/Poll-Bot)
+# MADE BY Coder-Boner (https://github.com/coder-boner/)
+# Repo (https://github.com/coder-boner/Poll-Bot)
+# v1.0.0
 
 import discord
 from discord.ext import commands
